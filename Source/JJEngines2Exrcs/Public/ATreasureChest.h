@@ -6,21 +6,33 @@
 #include "GameFramework/Actor.h"
 #include "ATreasureChest.generated.h"
 
+class UBoxComponent;
+
 UCLASS()
 class JJENGINES2EXRCS_API AATreasureChest : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	// Sets default values for this actor's properties
-	AATreasureChest();
+	public:	
+		// Sets default values for this actor's properties
+		AATreasureChest();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	protected:
+		// Called when the game starts or when spawned
+		virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+		// Treasure Mesh of type static mesh component
+		UPROPERTY(EditDefaultsOnly)
+		TObjectPtr<UStaticMeshComponent> TreasureMesh;
+
+		UPROPERTY(EditDefaultsOnly)
+		TObjectPtr<UBoxComponent> BoxCollider;
+
+	public:	
+		// Called every frame
+		virtual void Tick(float DeltaTime) override;
+
+		UPROPERTY()
+		bool bCollected;
 
 };
