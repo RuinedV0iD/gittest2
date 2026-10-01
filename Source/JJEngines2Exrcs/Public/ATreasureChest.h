@@ -18,8 +18,6 @@ class JJENGINES2EXRCS_API AATreasureChest : public AActor
 		AATreasureChest();
 
 	protected:
-		// Called when the game starts or when spawned
-		virtual void BeginPlay() override;
 
 		// Treasure Mesh of type static mesh component
 		UPROPERTY(EditDefaultsOnly)
@@ -28,11 +26,26 @@ class JJENGINES2EXRCS_API AATreasureChest : public AActor
 		UPROPERTY(EditDefaultsOnly)
 		TObjectPtr<UBoxComponent> BoxCollider;
 
-	public:	
-		// Called every frame
-		virtual void Tick(float DeltaTime) override;
+		UFUNCTION()
+		void Collected();
+
+		UFUNCTION()
+		void OnBeginOverlapComponentEvent(UPrimitiveComponent*
+			OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComp, int32
+			OtherBodyIndex, bool bFromSweep, const FHitResult&
+			SweepResult);
 
 		UPROPERTY()
 		bool bCollected;
+		
+
+		/*UFUNCTION()
+		virtual void UpdateScore();*/
+
+
+	public:
+
+		
 
 };

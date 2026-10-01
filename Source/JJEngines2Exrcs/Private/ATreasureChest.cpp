@@ -3,42 +3,59 @@
 
 #include "ATreasureChest.h"
 #include "Components/BoxComponent.h"
+#include "Engine/Engine.h"
+#include "GameFramework/Character.h"
 
 // Sets default values
 AATreasureChest::AATreasureChest()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bCanEverTick = false;
 
     // Initialize our Treasure Mesh
-    TreasureMesh = CreateDefaultSubobject<UStaticMeshComponent>("Treasure Mesh");
+    TreasureMesh = CreateDefaultSubobject<UStaticMeshComponent>("TreasureMesh");
 
     TreasureMesh->SetGenerateOverlapEvents(false);
 
     BoxCollider = CreateDefaultSubobject<UBoxComponent>("Collision Detection");
 
-    // Init the box collider
+    // Setup root component
     SetRootComponent(BoxCollider);
 
-    // Setup the root component
+    // Parent the root component
     TreasureMesh->SetupAttachment(BoxCollider);
 
-    // Parent the treasure mesh component to the box collider
     bCollected = false;
-
+    BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AATreasureChest::OnBeginOverlapComponentEvent);
+    BoxCollider->SetCollisionProfileName("OverlapAllDynamic");
+    BoxCollider->SetGenerateOverlapEvents(true);
 }
 
-// Called when the game starts or when spawned
-void AATreasureChest::BeginPlay()
+
+
+void AATreasureChest::Collected()
 {
-	Super::BeginPlay();
-	
+    if (bCollected)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("Treasure Already Collected."));
+        
+    }
+    else
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("Treasure Collected!"));
+        bCollected = true;
+    }
 }
 
-// Called every frame
-void AATreasureChest::Tick(float DeltaTime)
+void AATreasureChest::OnBeginOverlapComponentEvent(UPrimitiveComponent*
+    OverlappedComponent, AActor* OtherActor,
+    UPrimitiveComponent* OtherComp, int32
+    OtherBodyIndex, bool bFromSweep, const FHitResult&
+    SweepResult)
 {
-	Super::Tick(DeltaTime);
+    if (Cast<AActor>(OtherActor))
+    {
+        AATreasureChest::Collected();
+    }
 
 }
-
