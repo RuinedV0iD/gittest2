@@ -35,6 +35,7 @@ AATreasureChest::AATreasureChest()
 
 void AATreasureChest::Collected()
 {
+//  if bCollected is true, than a debug message will say it's collected else it will say collected
     if (bCollected)
     {
         GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("Treasure Already Collected."));
@@ -53,6 +54,7 @@ void AATreasureChest::OnBeginOverlapComponentEvent(UPrimitiveComponent*
     OtherBodyIndex, bool bFromSweep, const FHitResult&
     SweepResult)
 {
+//  if the actor overlaps the hitbox, call on the collected function
     if (Cast<AActor>(OtherActor))
     {
         AATreasureChest::Collected();
